@@ -85,12 +85,16 @@ export class UsersService {
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
     try{
-      const result = this.prisma.users.update({
+      if (updateUserDto.password){
+        const salt = await bcrypt.genSalt(8);
+        updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt)
+      }
+      const result = await this.prisma.users.update({
         where: {id},
         data: updateUserDto
-      })
+      });
       return {
         "status": "success",
         "data": result
@@ -106,7 +110,7 @@ export class UsersService {
 
   async remove(id: number) {
     try{
-      const result = this.prisma.users.delete({
+      const result = await this.prisma.users.delete({
         where:{id}
       })
       return {
