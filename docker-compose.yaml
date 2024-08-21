@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: backend-nest
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    networks:
+      - network
+    depends_on:
+      - postgredb
+  
+  postgredb:
+    container_name: postgredb
+    image: postgres:11
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+      # - ./backend/db/:/docker-entrypoint-initdb.d/
+    networks:
+      - network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=lixx@example.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - pgvolume:/var/lib/pgadmin
+    depends_on:
+      - postgredb
+    networks:
+      - network
+      
+networks:
+  network:
+
+volumes:
+  data:
+  pgvolume:
