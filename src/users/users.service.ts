@@ -7,8 +7,11 @@ import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService){}
+  constructor(
+      private readonly prisma: PrismaService
+  ){}
 
+  //TODO: Create User API
   async create(createUserDto: CreateUserDto) {
     const user = await this.prisma.users.findUnique({
       where:{
@@ -38,10 +41,7 @@ export class UsersService {
     }
   }
 
-  async login(){
-    return "login"
-  }
-
+  //TODO: Get All Users API
   async findAll() {
     try{
       const result = await this.prisma.users.findMany({
@@ -63,6 +63,7 @@ export class UsersService {
     } 
   }
 
+  //TODO: Get One User API
   async findOne(id: number) {
     try {
       const result = await this.prisma.users.findUnique({
@@ -85,6 +86,7 @@ export class UsersService {
     }
   }
 
+  //TODO: Update User API
   async update(id: number, updateUserDto: UpdateUserDto) {
     try{
       if (updateUserDto.password){
@@ -108,6 +110,7 @@ export class UsersService {
     
   }
 
+  //TODO: Remove User API
   async remove(id: number) {
     try{
       const result = await this.prisma.users.delete({

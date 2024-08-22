@@ -4,7 +4,3 @@ export class CreateUserDto {
     password: string;
 }
 
-export class LoginDto{
-    username: string;
-    password: string;
-}
